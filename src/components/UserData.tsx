@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { apiUrl, Service } from "@hex-labs/core";
-import { SimpleGrid, Text } from "@chakra-ui/react";
+import { Button, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import UserCard from "./UserCard";
 
 const UserData: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
+  const [users470, setUsers470] = useState<any[]>([]);
 
   useEffect(() => {
     // This is an example of an async function. The async keyword tells the
@@ -32,21 +33,67 @@ const UserData: React.FC = () => {
       // limit doesn't work
 
       setUsers(response?.data);
+
+      setUsers470(
+        response.data.filter((user: any) => {
+          return user.phoneNumber?.startsWith("470");
+        })
+      );
     };
     document.title = "Hexlabs Users";
     getUsers();
   }, []);
 
-  // TODO: Create a function that sorts the users array based on the first name of the users. Then, create a button that
-  // calls this function and sorts the users alphabetically by first name. You can use the built in sort() function to do this.
+  function shuffle(temp: any[]) {
+    const array = [...temp];
+    let currentIndex = array.length;
+
+    while (currentIndex != 0) {
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  }
 
   return (
     <>
-      <SimpleGrid columns={[2, 3, 5]} spacing={6} padding={10}>
+      <Flex padding={10}>
+        <Button
+          onClick={() => {
+            setUsers470(
+              [...users470].sort((a, b) =>
+                a.name.first.localeCompare(b.name.first)
+              )
+            );
+          }}
+        >
+          Sort by first name
+        </Button>
+        <Button
+          marginLeft={4}
+          onClick={() => {
+            setUsers470(shuffle(users470));
+          }}
+        >
+          Shuffle
+        </Button>
+      </Flex>
+      <SimpleGrid
+        columns={[2, 3, 3, 4, 5]}
+        spacing={6}
+        paddingBottom={10}
+        paddingX={10}
+      >
         {/* Here we are mapping every entry in our users array to a unique UserCard component, each with the unique respective
         data of each unique user in our array. This is a really important concept that we use a lot so be sure to familiarize
         yourself with the syntax - compartmentalizing code makes your work so much more readable. */}
-        {users.map((user) => (
+        {users470.map((user) => (
           <UserCard user={user} />
         ))}
       </SimpleGrid>
