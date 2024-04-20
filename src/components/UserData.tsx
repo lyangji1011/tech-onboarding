@@ -90,6 +90,10 @@ const UserData: React.FC = () => {
           onClick={() => {
             setUsers470(shuffle(users470));
           }}
+          _hover={{
+            bgGradient: "linear(to-r, #34bdeb, #7765f0)",
+            color: "white",
+          }}
         >
           Shuffle
         </Button>

@@ -8,6 +8,7 @@ import {
   Text,
   ModalFooter,
   Tooltip,
+  Box,
 } from "@chakra-ui/react";
 
 interface Props {
@@ -31,8 +32,15 @@ export default function UserModal({ isOpen, onClose, user }: Props) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Tooltip label={`Email ${user.name.first}`}>
+            <Tooltip
+              hasArrow
+              bg="gray.300"
+              color="black"
+              label={`Email ${user.name.first}`}
+              placement="right"
+            >
               <Text
+                display="inline"
                 onClick={openEmail}
                 _hover={{ color: "cyan.600", cursor: "pointer" }}
               >
