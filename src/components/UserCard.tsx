@@ -1,16 +1,12 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Flex, HStack, Text, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import UserModal from "./UserModal";
+import { InfoIcon } from "@chakra-ui/icons";
+import HexathonModal from "./HexathonModal";
 
 type Props = {
   user: any;
+  hexathons: any[];
 };
 
 // TODO: right now, the UserCard only displays the user's name and email. Create a new modal component <UserModal> that
@@ -26,7 +22,21 @@ type Props = {
 // and the /hexathons endpoint of the hexathons service to get a list of all the hexathons.
 
 const UserCard: React.FC<Props> = (props: Props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isProfileOpen,
+    onOpen: onProfileOpen,
+    onClose: onProfileClose,
+  } = useDisclosure();
+  const {
+    isOpen: isHexathonOpen,
+    onOpen: onHexathonOpen,
+    onClose: onHexathonClose,
+  } = useDisclosure();
+
+  const openHexathonModal = () => {
+    onHexathonOpen();
+    onProfileClose();
+  };
 
   return (
     <div>
@@ -38,7 +48,8 @@ const UserCard: React.FC<Props> = (props: Props) => {
         fontWeight="bold"
         alignItems="center"
         padding="10px"
-        onClick={onOpen}
+        onClick={onProfileOpen}
+        _hover={{ cursor: "pointer" }}
       >
         <Flex h="100%" flexDirection="column" justify="space-between">
           <Flex padding="2" flexDirection="column">
@@ -54,10 +65,26 @@ const UserCard: React.FC<Props> = (props: Props) => {
               {props.user.email}
             </Text>
           </Flex>
-          <Button>Applications</Button>
+          <HStack marginLeft={2} marginBottom={2}>
+            <InfoIcon
+              onClick={openHexathonModal}
+              color="gray.600"
+              _hover={{ color: "cyan.600", cursor: "pointer" }}
+            />
+          </HStack>
         </Flex>
       </Box>
-      <UserModal isOpen={isOpen} onClose={onClose} user={props.user} />
+      <HexathonModal
+        isOpen={isHexathonOpen}
+        onClose={onHexathonClose}
+        user={props.user}
+        hexathons={props.hexathons}
+      />
+      <UserModal
+        isOpen={isProfileOpen}
+        onClose={onProfileClose}
+        user={props.user}
+      />
     </div>
   );
 };

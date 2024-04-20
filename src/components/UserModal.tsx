@@ -7,6 +7,7 @@ import {
   ModalCloseButton,
   Text,
   ModalFooter,
+  Tooltip,
 } from "@chakra-ui/react";
 
 interface Props {
@@ -16,6 +17,10 @@ interface Props {
 }
 
 export default function UserModal({ isOpen, onClose, user }: Props) {
+  const openEmail = () => {
+    window.open(`mailto:${user.email}`);
+  };
+
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -26,8 +31,16 @@ export default function UserModal({ isOpen, onClose, user }: Props) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>{user.email}</Text>
+            <Tooltip label={`Email ${user.name.first}`}>
+              <Text
+                onClick={openEmail}
+                _hover={{ color: "cyan.600", cursor: "pointer" }}
+              >
+                {user.email}
+              </Text>
+            </Tooltip>
             <Text>{user.phoneNumber}</Text>
+            <Text>ID: {user.userId}</Text>
           </ModalBody>
           <ModalFooter />
         </ModalContent>

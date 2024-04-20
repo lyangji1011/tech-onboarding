@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { apiUrl, Service } from "@hex-labs/core";
-import { Button, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import UserCard from "./UserCard";
 
 const UserData: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [users470, setUsers470] = useState<any[]>([]);
+
+  const [hexathons, setHexathons] = useState<any[]>([]); // stores hexathon ids
 
   useEffect(() => {
     // This is an example of an async function. The async keyword tells the
@@ -22,15 +24,12 @@ const UserData: React.FC = () => {
       // TODO: Also explore some of the other ways to configure the api call such as filtering and pagination.
       // Try to filter all the users with phone numbers starting with 470 or increase the amount of users returned from the default 50 (don't go above 100).
 
-      const URL = "https://users.api.hexlabs.org/users/hexlabs";
+      const URL = "/users/hexlabs";
       const response = await axios.get(apiUrl(Service.USERS, URL), {
         params: {
           limit: 10,
         },
       });
-      // const temp = await axios.get(apiUrl(Service.HEXATHONS, URL));
-      // console.log(temp);
-      // limit doesn't work
 
       setUsers(response?.data);
 
@@ -42,6 +41,17 @@ const UserData: React.FC = () => {
     };
     document.title = "Hexlabs Users";
     getUsers();
+
+    const getHexathons = async () => {
+      const response = await axios.get(apiUrl(Service.HEXATHONS, "/hexathons"));
+      console.log(response.data);
+      setHexathons(
+        response.data.filter((hexathon: any) => {
+          return hexathon.id;
+        })
+      );
+    };
+    getHexathons();
   }, []);
 
   function shuffle(temp: any[]) {
@@ -94,7 +104,7 @@ const UserData: React.FC = () => {
         data of each unique user in our array. This is a really important concept that we use a lot so be sure to familiarize
         yourself with the syntax - compartmentalizing code makes your work so much more readable. */}
         {users470.map((user) => (
-          <UserCard user={user} />
+          <UserCard user={user} hexathons={hexathons} />
         ))}
       </SimpleGrid>
     </>
