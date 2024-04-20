@@ -33,14 +33,13 @@ const UserCard: React.FC<Props> = (props: Props) => {
     onClose: onHexathonClose,
   } = useDisclosure();
 
-  const openHexathonModal = () => {
-    onHexathonOpen();
-  };
-
-  const openProfile = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const openHexathonModal = (
+    event: React.MouseEvent<SVGElement, MouseEvent>
+  ) => {
     if (event && event.stopPropagation) {
       event.stopPropagation();
     }
+    onHexathonOpen();
   };
 
   return (
@@ -53,7 +52,7 @@ const UserCard: React.FC<Props> = (props: Props) => {
         fontWeight="bold"
         alignItems="center"
         padding="10px"
-        onClick={(e) => openProfile(e)}
+        onClick={onProfileOpen}
         _hover={{ cursor: "pointer" }}
       >
         <Flex h="100%" flexDirection="column" justify="space-between">
@@ -72,7 +71,7 @@ const UserCard: React.FC<Props> = (props: Props) => {
           </Flex>
           <HStack marginLeft={2} marginBottom={2}>
             <InfoIcon
-              onClick={openHexathonModal}
+              onClick={(e) => openHexathonModal(e)}
               color="gray.600"
               _hover={{ color: "cyan.600", cursor: "pointer" }}
             />
