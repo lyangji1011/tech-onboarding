@@ -35,7 +35,12 @@ const UserCard: React.FC<Props> = (props: Props) => {
 
   const openHexathonModal = () => {
     onHexathonOpen();
-    onProfileClose();
+  };
+
+  const openProfile = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (event && event.stopPropagation) {
+      event.stopPropagation();
+    }
   };
 
   return (
@@ -48,7 +53,7 @@ const UserCard: React.FC<Props> = (props: Props) => {
         fontWeight="bold"
         alignItems="center"
         padding="10px"
-        onClick={onProfileOpen}
+        onClick={(e) => openProfile(e)}
         _hover={{ cursor: "pointer" }}
       >
         <Flex h="100%" flexDirection="column" justify="space-between">
